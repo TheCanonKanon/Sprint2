@@ -34,10 +34,16 @@ async function repoCommitsFetch (repos, userName, userID) {
         });
         const commitsJSON = await commits.json();
         for (let y of commitsJSON) {
-            console.log(y)
-            if (y.author.login === userName || y.author.id === userID) {
-                const date = new Date(y.commit.author.date);
-                productiveDates[date.getDay()]++;
+            if (y.author != null) {
+                if (y.author.login === userName || y.author.id === userID) {
+                    const date = new Date(y.commit.author.date);
+                    productiveDates[date.getDay()]++;
+                }
+            } else if (y.committer != null) {
+                if (y.committer.login === userName || y.committer.id === userID) {
+                    const date = new Date(y.commit.committer.date);
+                    productiveDates[date.getDay()]++;
+                }
             }
         }
     }
