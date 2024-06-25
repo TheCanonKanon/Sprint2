@@ -33,11 +33,17 @@ async function repoCommitsFetch (repos, userName, userID) {
             }
         });
         const commitsJSON = await commits.json();
+        console.log(commitsJSON);
         for (let y of commitsJSON) {
             if (y.author != null) {
                 if (y.author.login === userName || y.author.id === userID) {
                     const date = new Date(y.commit.author.date);
                     productiveDates[date.getDay()]++;
+                } else if (y.committer != null) {
+                    if (y.committer.login === userName || y.committer.id === userID) {
+                        const date = new Date(y.commit.committer.date);
+                        productiveDates[date.getDay()]++;
+                    }
                 }
             } else if (y.committer != null) {
                 if (y.committer.login === userName || y.committer.id === userID) {
@@ -53,26 +59,38 @@ async function repoCommitsFetch (repos, userName, userID) {
 async function userRepoFetch () {
     const userName = document.querySelector("#username-search").value;
 
-    const githubUserID = await fetch (`https://api.github.com/users/${userName}`, {
-        method: "GET",
-        headers: {
-            "Authorization": githubAPI,
-        }
-    })
-    const githubUserIDJSON = await githubUserID.json();
-    const githubName = githubUserIDJSON.login;
-    const githubID = githubUserIDJSON.id;
+    try {
+        const githubUserID = await fetch (`https://api.github.com/users/${userName}`, {
+            method: "GET",
+            headers: {
+                "Authorization": githubAPI,
+            }
+        })
+        console.log("githubUserID",githubUserID)
+        if (githubUserID.ok !== true){return};
+        const githubUserIDJSON = await githubUserID.json();
+        console.log("githubUserIDJSON ", githubUserIDJSON);
+        const githubName = githubUserIDJSON.login;
+        const githubID = githubUserIDJSON.id;
+    
+        const response = await fetch (`https://api.github.com/users/${userName}/repos`, {
+            method: "GET",
+            headers: {
+                "Authorization": githubAPI,
+            }
+        })
+        const responseJSON = await response.json()
+        console.log("responseJSON", responseJSON)
+        await repoCommitsFetch (responseJSON, githubName, githubID)
 
-    const response = await fetch (`https://api.github.com/users/${userName}/repos`, {
-        method: "GET",
-        headers: {
-            "Authorization": githubAPI,
-        }
-    })
-    const responseJSON = await response.json()
-    repoCommitsFetch (responseJSON, githubName, githubID)
+    } catch (error) {
+        console.log(error)
+    }
     }
 
 console.log(userRepoFetch());
 
 
+function errorHandling (errorObject) {
+    return;
+};
