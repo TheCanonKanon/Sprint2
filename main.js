@@ -22,17 +22,22 @@ async function top3Repos (repos) {
 
 
 //get the productive days from all commits a user did
-async function repoCommitsFetch (repos, userName) {
+async function repoCommitsFetch (repos, userName, userID) {
     //sunday to saturday
     const productiveDates = [0,0,0,0,0,0,0]
     for (let x of repos) {
-        const commits = await fetch (x.commits_url.replace("{/sha}",""));
+        const commits = await fetch (x.commits_url.replace("{/sha}",""), {
+            method: "GET",
+            headers: {
+                "Authorization": githubAPI,
+            }
+        });
         const commitsJSON = await commits.json();
         for (let y of commitsJSON) {
-            if (y.commit.author.name === userName) {
+            console.log(y)
+            if (y.author.login === userName || y.author.id === userID) {
                 const date = new Date(y.commit.author.date);
                 productiveDates[date.getDay()]++;
-                console.log(...productiveDates);
             }
         }
     }
@@ -40,12 +45,26 @@ async function repoCommitsFetch (repos, userName) {
 }
 
 async function userRepoFetch () {
-    let userName = document.querySelector("#username-search").value;
-    console.log("test4");
-    const response = await fetch (`https://api.github.com/users/${userName}/repos`)
-    console.log("test3");
+    const userName = document.querySelector("#username-search").value;
+
+    const githubUserID = await fetch (`https://api.github.com/users/${userName}`, {
+        method: "GET",
+        headers: {
+            "Authorization": githubAPI,
+        }
+    })
+    const githubUserIDJSON = await githubUserID.json();
+    const githubName = githubUserIDJSON.login;
+    const githubID = githubUserIDJSON.id;
+
+    const response = await fetch (`https://api.github.com/users/${userName}/repos`, {
+        method: "GET",
+        headers: {
+            "Authorization": githubAPI,
+        }
+    })
     const responseJSON = await response.json()
-    repoCommitsFetch (responseJSON,userName)
+    repoCommitsFetch (responseJSON, githubName, githubID)
     }
 
 console.log(userRepoFetch());
