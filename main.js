@@ -14,6 +14,10 @@
 //that might take a while to process
 //https://api.github.com/repositories
 
+window.onload = () => {
+    userRepoFetch();
+}
+
 
 //find the top 3 "best" public repos of user
 async function top3Repos (repos) {
@@ -33,7 +37,6 @@ async function repoCommitsFetch (repos, userName, userID) {
             }
         });
         const commitsJSON = await commits.json();
-        console.log(commitsJSON);
         for (let y of commitsJSON) {
             if (y.author != null) {
                 if (y.author.login === userName || y.author.id === userID) {
@@ -66,10 +69,8 @@ async function userRepoFetch () {
                 "Authorization": githubAPI,
             }
         })
-        console.log("githubUserID",githubUserID)
         if (githubUserID.ok !== true){return};
         const githubUserIDJSON = await githubUserID.json();
-        console.log("githubUserIDJSON ", githubUserIDJSON);
         const githubName = githubUserIDJSON.login;
         const githubID = githubUserIDJSON.id;
     
@@ -80,7 +81,6 @@ async function userRepoFetch () {
             }
         })
         const responseJSON = await response.json()
-        console.log("responseJSON", responseJSON)
         await repoCommitsFetch (responseJSON, githubName, githubID)
 
     } catch (error) {
@@ -88,7 +88,7 @@ async function userRepoFetch () {
     }
     }
 
-console.log(userRepoFetch());
+
 
 
 function errorHandling (errorObject) {
