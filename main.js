@@ -32,6 +32,7 @@ async function repoCommitsFetch (repos, userName) {
             if (y.commit.author.name === userName) {
                 const date = new Date(y.commit.author.date);
                 productiveDates[date.getDay()]++;
+                console.log(...productiveDates);
             }
         }
     }
@@ -47,6 +48,6 @@ async function userRepoFetch () {
     repoCommitsFetch (responseJSON,userName)
     }
 
-//console.log(userRepoFetch());
+console.log(userRepoFetch());
 
 
