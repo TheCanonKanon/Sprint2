@@ -1,5 +1,14 @@
 "use strict";
 
+//global Variable for testing only
+const productiveDates = [0,0,0,0,0,0,0];
+const testArray = [];
+
+const mainHeader = new Headers ({
+    "Authorization": "token " + githubAPI,
+    "Accept": "application/vnd.github+json",
+    "X-GitHub-Api-Version": "2022-11-28"
+})
 
 //getting all public repos from user
 //we can probably sort them by some metrics
@@ -26,37 +35,31 @@ async function top3Repos (repos) {
 
 
 //get the productive days from all commits a user did
-async function repoCommitsFetch (repos, userName, userID) {
+async function repoCommitsFetch (repo, userName, userID) {
     //sunday to saturday
-    const productiveDates = [0,0,0,0,0,0,0]
-    for (let x of repos) {
-        const commits = await fetch (x.commits_url.replace("{/sha}",""), {
-            method: "GET",
-            headers: {
-                "Authorization": githubAPI,
-            }
-        });
-        const commitsJSON = await commits.json();
-        for (let y of commitsJSON) {
-            if (y.author != null) {
-                if (y.author.login === userName || y.author.id === userID) {
-                    const date = new Date(y.commit.author.date);
-                    productiveDates[date.getDay()]++;
-                } else if (y.committer != null) {
-                    if (y.committer.login === userName || y.committer.id === userID) {
-                        const date = new Date(y.commit.committer.date);
-                        productiveDates[date.getDay()]++;
-                    }
-                }
+    const commits = await fetch (repo.commits_url.replace("{/sha}",""), {
+        method: "GET",
+        headers: mainHeader
+    });
+    const commitsJSON = await commits.json();
+    for (let y of commitsJSON) {
+        if (y.author != null) {
+            if (y.author.login === userName || y.author.id === userID) {
+                const date = new Date(y.commit.author.date);
+                productiveDates[date.getDay()]++;
             } else if (y.committer != null) {
                 if (y.committer.login === userName || y.committer.id === userID) {
                     const date = new Date(y.commit.committer.date);
                     productiveDates[date.getDay()]++;
                 }
             }
+        } else if (y.committer != null) {
+            if (y.committer.login === userName || y.committer.id === userID) {
+                const date = new Date(y.commit.committer.date);
+                productiveDates[date.getDay()]++;
+            }
         }
     }
-    console.log(...productiveDates);
 }
 
 async function userRepoFetch () {
@@ -65,9 +68,7 @@ async function userRepoFetch () {
     try {
         const githubUserID = await fetch (`https://api.github.com/users/${userName}`, {
             method: "GET",
-            headers: {
-                "Authorization": githubAPI,
-            }
+            headers: mainHeader
         })
         if (githubUserID.ok !== true){return};
         const githubUserIDJSON = await githubUserID.json();
@@ -76,18 +77,17 @@ async function userRepoFetch () {
     
         const response = await fetch (`https://api.github.com/users/${userName}/repos`, {
             method: "GET",
-            headers: {
-                "Authorization": githubAPI,
-            }
+            headers: mainHeader
         })
         const responseJSON = await response.json()
-        await repoCommitsFetch (responseJSON, githubName, githubID)
+        for (let x of responseJSON) {
+            repoCommitsFetch (x, githubName, githubID)
+        }
 
     } catch (error) {
         console.log(error)
     }
     }
-
 
 
 
