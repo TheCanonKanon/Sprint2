@@ -2,7 +2,7 @@
 
 //global Variable for testing only
 const productiveDates = [0,0,0,0,0,0,0];
-const testArray = [];
+let loopCounter = 0;
 
 const mainHeader = new Headers ({
     "Authorization": "token " + githubAPI,
@@ -46,20 +46,28 @@ async function repoCommitsFetch (repo, userName, userID) {
         if (y.author != null) {
             if (y.author.login === userName || y.author.id === userID) {
                 const date = new Date(y.commit.author.date);
-                productiveDates[date.getDay()]++;
+                const commitField = document.getElementById("commit" + date.getDay())
+                commitField.innerText++
+                //productiveDates[date.getDay()]++;
             } else if (y.committer != null) {
                 if (y.committer.login === userName || y.committer.id === userID) {
                     const date = new Date(y.commit.committer.date);
-                    productiveDates[date.getDay()]++;
+                    const commitField = document.getElementById("commit" + date.getDay())
+                    commitField.innerText++
+                    //productiveDates[date.getDay()]++;
                 }
             }
         } else if (y.committer != null) {
             if (y.committer.login === userName || y.committer.id === userID) {
                 const date = new Date(y.commit.committer.date);
-                productiveDates[date.getDay()]++;
+                const commitField = document.getElementById("commit" + date.getDay())
+                commitField.innerText++
+                //productiveDates[date.getDay()]++;
             }
         }
     }
+    
+    loopCounter--;
 }
 
 async function userRepoFetch () {
@@ -79,9 +87,20 @@ async function userRepoFetch () {
             method: "GET",
             headers: mainHeader
         })
+
+        //loop starting the commit count
         const responseJSON = await response.json()
         for (let x of responseJSON) {
-            repoCommitsFetch (x, githubName, githubID)
+            if (loopCounter < 50) {
+                loopCounter++
+                repoCommitsFetch (x, githubName, githubID)
+            } else if(loopCounter < 80) {
+                loopCounter++
+                setTimeout(repoCommitsFetch, 200, x, githubName, githubID);
+            } else {
+                loopCounter++
+                setTimeout(repoCommitsFetch, 1000, x, githubName, githubID);
+            }
         }
 
     } catch (error) {
