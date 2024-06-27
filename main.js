@@ -33,6 +33,7 @@ async function top3Repos (repos) {
     
 }
 
+//auslagerung in async function um multiple aufrufe zu starten und die geschwindigkeit von mehrere Sekunden auf wenige zu senken.
 async function commitFetchAndSort(commits,repo,currentPage,pageNumber, userName, userID) {
     if (currentPage !== 0) {
         commits = await fetch (repo.commits_url.replace("{/sha}","?per_page=100&page=" + currentPage), {
@@ -96,7 +97,7 @@ async function repoCommitsFetch (repo, userName, userID) {
     do {
         commitFetchAndSort(commits,repo,currentPage,pageNumber, userName, userID)        
         currentPage++
-    } while (currentPage < pageNumber)
+    } while (currentPage <= pageNumber)
     
     loopCounter--;
 }
