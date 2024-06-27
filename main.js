@@ -33,6 +33,41 @@ async function top3Repos (repos) {
     
 }
 
+async function commitFetchAndSort(commits,repo,currentPage,pageNumber, userName, userID) {
+    if (currentPage !== 0) {
+        commits = await fetch (repo.commits_url.replace("{/sha}","?per_page=100&page=" + currentPage), {
+            headers: mainHeader
+        });
+    }
+    console.log("Current Page: ",currentPage, " Max Page: ", pageNumber);
+
+    //going over the commits and putting them directly into the table
+    const commitsJSON = await commits.json();
+    for (let y of commitsJSON) {
+        if (y.author != null) {
+            if (y.author.login === userName || y.author.id === userID) {
+                const date = new Date(y.commit.author.date);
+                const commitField = document.getElementById("commit" + date.getDay())
+                commitField.innerText++
+                //productiveDates[date.getDay()]++;
+            } else if (y.committer != null) {
+                if (y.committer.login === userName || y.committer.id === userID) {
+                    const date = new Date(y.commit.committer.date);
+                    const commitField = document.getElementById("commit" + date.getDay())
+                    commitField.innerText++
+                    //productiveDates[date.getDay()]++;
+                }
+            }
+        } else if (y.committer != null) {
+            if (y.committer.login === userName || y.committer.id === userID) {
+                const date = new Date(y.commit.committer.date);
+                const commitField = document.getElementById("commit" + date.getDay())
+                commitField.innerText++
+                //productiveDates[date.getDay()]++;
+            }
+        }
+    }
+}
 
 //get the productive days from all commits a user did
 async function repoCommitsFetch (repo, userName, userID) {
@@ -41,7 +76,7 @@ async function repoCommitsFetch (repo, userName, userID) {
     let currentPage = 0;
 
     //fetch the first page
-    let commits = await fetch (repo.commits_url.replace("{/sha}","?per_page=100"), {
+    const commits = await fetch (repo.commits_url.replace("{/sha}","?per_page=100"), {
         headers: mainHeader
     });
 
@@ -59,39 +94,7 @@ async function repoCommitsFetch (repo, userName, userID) {
     }
 
     do {
-        if (currentPage !== 0) {
-            commits = await fetch (repo.commits_url.replace("{/sha}","?per_page=100&page=" + currentPage), {
-                headers: mainHeader
-            });
-        }
-        console.log("Current Page: ",currentPage, " Max Page: ", pageNumber);
-
-        //going over the commits and putting them directly into the table
-        const commitsJSON = await commits.json();
-        for (let y of commitsJSON) {
-            if (y.author != null) {
-                if (y.author.login === userName || y.author.id === userID) {
-                    const date = new Date(y.commit.author.date);
-                    const commitField = document.getElementById("commit" + date.getDay())
-                    commitField.innerText++
-                    //productiveDates[date.getDay()]++;
-                } else if (y.committer != null) {
-                    if (y.committer.login === userName || y.committer.id === userID) {
-                        const date = new Date(y.commit.committer.date);
-                        const commitField = document.getElementById("commit" + date.getDay())
-                        commitField.innerText++
-                        //productiveDates[date.getDay()]++;
-                    }
-                }
-            } else if (y.committer != null) {
-                if (y.committer.login === userName || y.committer.id === userID) {
-                    const date = new Date(y.commit.committer.date);
-                    const commitField = document.getElementById("commit" + date.getDay())
-                    commitField.innerText++
-                    //productiveDates[date.getDay()]++;
-                }
-            }
-        }
+        commitFetchAndSort(commits,repo,currentPage,pageNumber, userName, userID)        
         currentPage++
     } while (currentPage < pageNumber)
     
