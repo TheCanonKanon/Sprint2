@@ -36,19 +36,53 @@ async function top3Repos (repos) {
 
 //get the productive days from all commits a user did
 async function repoCommitsFetch (repo, userName, userID) {
-    //sunday to saturday
-    const commits = await fetch (repo.commits_url.replace("{/sha}",""), {
-        method: "GET",
+
+    let pageNumber = 0;
+    let currentPage = 0;
+
+    //fetch the first page
+    let commits = await fetch (repo.commits_url.replace("{/sha}","?per_page=100"), {
         headers: mainHeader
     });
-    const commitsJSON = await commits.json();
-    for (let y of commitsJSON) {
-        if (y.author != null) {
-            if (y.author.login === userName || y.author.id === userID) {
-                const date = new Date(y.commit.author.date);
-                const commitField = document.getElementById("commit" + date.getDay())
-                commitField.innerText++
-                //productiveDates[date.getDay()]++;
+
+    
+
+    if (commits.headers.has("link")) {
+        //getting the number of the last page, probably the hard way
+        const linkArray = commits.headers.get("link").split(",")
+        for (let y of linkArray) {
+        if(y.includes("rel=\"last\"")) {
+            pageNumber = y.slice(y.indexOf("commits?per_page=100&page=")+26,y.indexOf(">; rel=\"last\""));
+            break;
+        }
+        }
+    }
+
+    do {
+        if (currentPage !== 0) {
+            commits = await fetch (repo.commits_url.replace("{/sha}","?per_page=100&page=" + currentPage), {
+                headers: mainHeader
+            });
+        }
+        console.log("Current Page: ",currentPage, " Max Page: ", pageNumber);
+
+        //going over the commits and putting them directly into the table
+        const commitsJSON = await commits.json();
+        for (let y of commitsJSON) {
+            if (y.author != null) {
+                if (y.author.login === userName || y.author.id === userID) {
+                    const date = new Date(y.commit.author.date);
+                    const commitField = document.getElementById("commit" + date.getDay())
+                    commitField.innerText++
+                    //productiveDates[date.getDay()]++;
+                } else if (y.committer != null) {
+                    if (y.committer.login === userName || y.committer.id === userID) {
+                        const date = new Date(y.commit.committer.date);
+                        const commitField = document.getElementById("commit" + date.getDay())
+                        commitField.innerText++
+                        //productiveDates[date.getDay()]++;
+                    }
+                }
             } else if (y.committer != null) {
                 if (y.committer.login === userName || y.committer.id === userID) {
                     const date = new Date(y.commit.committer.date);
@@ -57,15 +91,9 @@ async function repoCommitsFetch (repo, userName, userID) {
                     //productiveDates[date.getDay()]++;
                 }
             }
-        } else if (y.committer != null) {
-            if (y.committer.login === userName || y.committer.id === userID) {
-                const date = new Date(y.commit.committer.date);
-                const commitField = document.getElementById("commit" + date.getDay())
-                commitField.innerText++
-                //productiveDates[date.getDay()]++;
-            }
         }
-    }
+        currentPage++
+    } while (currentPage < pageNumber)
     
     loopCounter--;
 }
