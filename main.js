@@ -76,27 +76,35 @@ async function top3Repos (repos) {
         if (watchers.length < 3) {
             watchers.push(x)
         } else if (watchers[watchers.length-1].watchers_count < x.watchers_count) {
+            console.log(watchers[0].watchers_count,watchers[1].watchers_count,watchers[2].watchers_count);
             watchers.pop();
             watchers.push(x);
+        }
+        //but ugly sort
+        if (watchers.length === 3) {
             if (watchers[0].watchers_count <= watchers[1].watchers_count) {
                 watchers.splice(0,0,watchers[1]);
                 watchers.splice(2,1);
+                console.log(watchers[0].watchers_count,watchers[1].watchers_count,watchers[2].watchers_count);
                 if (watchers[0].watchers_count <= watchers[2].watchers_count) {
                     watchers.splice(0,0,watchers[2]);
                     watchers.pop();
+                    console.log(watchers[0].watchers_count,watchers[1].watchers_count,watchers[2].watchers_count);
                 } else if (watchers[1].watchers_count <= watchers[2].watchers_count) {
                     watchers.splice(1,0,watchers[2]);
                     watchers.pop();
+                    console.log(watchers[0].watchers_count,watchers[1].watchers_count,watchers[2].watchers_count);
                 }
             } else if (watchers[0].watchers_count <= watchers[2].watchers_count) {
                 watchers.splice(0,0,watchers[2]);
                 watchers.pop();
+                console.log(watchers[0].watchers_count,watchers[1].watchers_count,watchers[2].watchers_count);
             } else if (watchers[1].watchers_count <= watchers[2].watchers_count) {
                 watchers.splice(1,0,watchers[2]);
                 watchers.pop();
+                console.log(watchers[0].watchers_count,watchers[1].watchers_count,watchers[2].watchers_count);
             }
         }
-        //but ugly sort
     }
     console.log(watchers);
 }
