@@ -1,7 +1,6 @@
 "use strict";
 
 //global Variable for testing only
-const productiveDates = [0,0,0,0,0,0,0];
 let loopCounter = 0;
 
 const mainHeader = new Headers ({
@@ -25,12 +24,81 @@ const mainHeader = new Headers ({
 
 window.onload = () => {
     userRepoFetch();
+    //test();
 }
+
+/*const testArray = [1,2,3,1,3,2,2,1,3,2,3,1,3,1,2,3,2,1]
+
+
+for (let bla = 0; bla < testArray.length-1; bla += 3) {
+    console.log(testArray[bla],testArray[bla+1],testArray[bla+2]);
+    test(testArray[bla],testArray[bla+1],testArray[bla+2])
+}
+
+
+function test (a,b,c) {
+    let watchers = [a,b,c]
+    if (watchers[0] <= watchers[1]) {
+        watchers.splice(0,0,watchers[1]);
+        watchers.splice(2,1);
+        console.log(watchers);
+        if (watchers[0] <= watchers[2]) {
+            watchers.splice(0,0,watchers[2]);
+            watchers.pop();
+            console.log(watchers);
+        } else if (watchers[1] <= watchers[2]) {
+            watchers.splice(1,0,watchers[2]);
+            watchers.pop();
+            console.log(watchers);
+        }
+    } else if (watchers[0] <= watchers[2]) {
+        watchers.splice(0,0,watchers[2]);
+        watchers.pop();
+        console.log(watchers);
+    } else if (watchers[1] <= watchers[2]) {
+        watchers.splice(1,0,watchers[2]);
+        watchers.pop();
+        console.log(watchers);
+    }
+
+
+    //console.log(watchers);
+}*/
 
 
 //find the top 3 "best" public repos of user
 async function top3Repos (repos) {
-    
+    let watchers = [];
+    let stargazer = [];
+    let forks = [];
+    let size = [];
+    for(let x of repos) {
+        if (watchers.length < 3) {
+            watchers.push(x)
+        } else if (watchers[watchers.length-1].watchers_count < x.watchers_count) {
+            watchers.pop();
+            watchers.push(x);
+            if (watchers[0].watchers_count <= watchers[1].watchers_count) {
+                watchers.splice(0,0,watchers[1]);
+                watchers.splice(2,1);
+                if (watchers[0].watchers_count <= watchers[2].watchers_count) {
+                    watchers.splice(0,0,watchers[2]);
+                    watchers.pop();
+                } else if (watchers[1].watchers_count <= watchers[2].watchers_count) {
+                    watchers.splice(1,0,watchers[2]);
+                    watchers.pop();
+                }
+            } else if (watchers[0].watchers_count <= watchers[2].watchers_count) {
+                watchers.splice(0,0,watchers[2]);
+                watchers.pop();
+            } else if (watchers[1].watchers_count <= watchers[2].watchers_count) {
+                watchers.splice(1,0,watchers[2]);
+                watchers.pop();
+            }
+        }
+        //but ugly sort
+    }
+    console.log(watchers);
 }
 
 //auslagerung in async function um multiple aufrufe zu starten und die geschwindigkeit von mehrere Sekunden auf wenige zu senken.
@@ -40,7 +108,6 @@ async function commitFetchAndSort(commits,repo,currentPage,pageNumber, userName,
             headers: mainHeader
         });
     }
-    console.log("Current Page: ",currentPage, " Max Page: ", pageNumber);
 
     //going over the commits and putting them directly into the table
     const commitsJSON = await commits.json();
@@ -119,10 +186,11 @@ async function userRepoFetch () {
             method: "GET",
             headers: mainHeader
         })
+        const responseJSON = await response.json()
+
 
         //loop starting the commit count
-        const responseJSON = await response.json()
-        for (let x of responseJSON) {
+        /*for (let x of responseJSON) {
             if (loopCounter < 50) {
                 loopCounter++
                 repoCommitsFetch (x, githubName, githubID)
@@ -133,7 +201,9 @@ async function userRepoFetch () {
                 loopCounter++
                 setTimeout(repoCommitsFetch, 1000, x, githubName, githubID);
             }
-        }
+        }*/
+
+        top3Repos(responseJSON);
 
     } catch (error) {
         console.log(error)
