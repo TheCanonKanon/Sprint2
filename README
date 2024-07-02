@@ -4,3 +4,4 @@ toDO:
     
     code:
         - add session Storage and cache aufrufe
+        - need to call the main function after username checks out

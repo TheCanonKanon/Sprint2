@@ -23,7 +23,7 @@ const mainHeader = new Headers ({
 //https://api.github.com/repositories
 
 window.onload = () => {
-    userRepoFetch();
+    //userRepoFetch();
     eventHandler();
     const top3SelectorChange = document.querySelector("#top3Select");
     top3SelectorChange.selectedIndex = 0
@@ -495,10 +495,15 @@ async function repoCommitsFetch (repo, userName, userID) {
 
 /*-----------------------------------Repos Fetching and Starting Point----------------------------------------*/
 
+async function userCheck(userName) {
+    const userNameCheck = await fetch (`https://api.github.com/users/${userName}`, {
+        method: "HEAD",
+        headers: mainHeader
+    })
+    console.log(userNameCheck);
+}
 
-async function userRepoFetch () {
-    const userName = document.querySelector("#username-search").value;
-
+async function userRepoFetch (userName) {
     try {
         const githubUserID = await fetch (`https://api.github.com/users/${userName}`, {
             method: "GET",
@@ -545,6 +550,8 @@ async function userRepoFetch () {
 function eventHandler() {
     const top3SelectorChange = document.querySelector("#top3Select");
     top3SelectorChange.addEventListener("change", () => top3SelectorHasChanged(top3SelectorChange.selectedOptions[0].id))
+    const usernameSearch = document.querySelector("#username-search");
+    usernameSearch.addEventListener("change", () => userCheck(usernameSearch.value));
 }
 
 function errorHandling (errorObject) {
