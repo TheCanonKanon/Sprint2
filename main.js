@@ -24,8 +24,12 @@ const mainHeader = new Headers ({
 
 window.onload = () => {
     userRepoFetch();
-    //test();
+    eventHandler();
+    const top3SelectorChange = document.querySelector("#top3Select");
+    top3SelectorChange.selectedIndex = 0
 }
+
+
 
 /*const testArray = [1,2,3,1,3,2,2,1,3,2,3,1,3,1,2,3,2,1]
 
@@ -37,77 +41,388 @@ for (let bla = 0; bla < testArray.length-1; bla += 3) {
 
 
 function test (a,b,c) {
-    let watchers = [a,b,c]
-    if (watchers[0] <= watchers[1]) {
-        watchers.splice(0,0,watchers[1]);
-        watchers.splice(2,1);
-        console.log(watchers);
-        if (watchers[0] <= watchers[2]) {
-            watchers.splice(0,0,watchers[2]);
-            watchers.pop();
-            console.log(watchers);
-        } else if (watchers[1] <= watchers[2]) {
-            watchers.splice(1,0,watchers[2]);
-            watchers.pop();
-            console.log(watchers);
+    let selectedValue = [a,b,c]
+    if (selectedValue[0] <= selectedValue[1]) {
+        selectedValue.splice(0,0,selectedValue[1]);
+        selectedValue.splice(2,1);
+        console.log(selectedValue);
+        if (selectedValue[0] <= selectedValue[2]) {
+            selectedValue.splice(0,0,selectedValue[2]);
+            selectedValue.pop();
+            console.log(selectedValue);
+        } else if (selectedValue[1] <= selectedValue[2]) {
+            selectedValue.splice(1,0,selectedValue[2]);
+            selectedValue.pop();
+            console.log(selectedValue);
         }
-    } else if (watchers[0] <= watchers[2]) {
-        watchers.splice(0,0,watchers[2]);
-        watchers.pop();
-        console.log(watchers);
-    } else if (watchers[1] <= watchers[2]) {
-        watchers.splice(1,0,watchers[2]);
-        watchers.pop();
-        console.log(watchers);
+    } else if (selectedValue[0] <= selectedValue[2]) {
+        selectedValue.splice(0,0,selectedValue[2]);
+        selectedValue.pop();
+        console.log(selectedValue);
+    } else if (selectedValue[1] <= selectedValue[2]) {
+        selectedValue.splice(1,0,selectedValue[2]);
+        selectedValue.pop();
+        console.log(selectedValue);
     }
 
 
-    //console.log(watchers);
+    //console.log(selectedValue);
 }*/
 
+/*-----------------------Template---------------------------------------
 
-//find the top 3 "best" public repos of user
-async function top3Repos (repos) {
-    let watchers = [];
-    let stargazer = [];
-    let forks = [];
-    let size = [];
+async function top3Template (repos) {
+    let selectedValue = [];
     for(let x of repos) {
-        if (watchers.length < 3) {
-            watchers.push(x)
-        } else if (watchers[watchers.length-1].watchers_count < x.watchers_count) {
-            console.log(watchers[0].watchers_count,watchers[1].watchers_count,watchers[2].watchers_count);
-            watchers.pop();
-            watchers.push(x);
-        }
-        //but ugly sort
-        if (watchers.length === 3) {
-            if (watchers[0].watchers_count <= watchers[1].watchers_count) {
-                watchers.splice(0,0,watchers[1]);
-                watchers.splice(2,1);
-                console.log(watchers[0].watchers_count,watchers[1].watchers_count,watchers[2].watchers_count);
-                if (watchers[0].watchers_count <= watchers[2].watchers_count) {
-                    watchers.splice(0,0,watchers[2]);
-                    watchers.pop();
-                    console.log(watchers[0].watchers_count,watchers[1].watchers_count,watchers[2].watchers_count);
-                } else if (watchers[1].watchers_count <= watchers[2].watchers_count) {
-                    watchers.splice(1,0,watchers[2]);
-                    watchers.pop();
-                    console.log(watchers[0].watchers_count,watchers[1].watchers_count,watchers[2].watchers_count);
+        selectedValue.push(x)
+        if (selectedValue.length === 3) {
+            if (selectedValue[0]."change_this" <= selectedValue[1]."change_this") {
+                selectedValue.splice(0,0,selectedValue[1]);
+                selectedValue.splice(2,1);
+                if (selectedValue[0]."change_this" <= selectedValue[2]."change_this") {
+                    selectedValue.splice(0,0,selectedValue[2]);
+                    selectedValue.pop();
+                } else if (selectedValue[1]."change_this" <= selectedValue[2]."change_this") {
+                    selectedValue.splice(1,0,selectedValue[2]);
+                    selectedValue.pop();
                 }
-            } else if (watchers[0].watchers_count <= watchers[2].watchers_count) {
-                watchers.splice(0,0,watchers[2]);
-                watchers.pop();
-                console.log(watchers[0].watchers_count,watchers[1].watchers_count,watchers[2].watchers_count);
-            } else if (watchers[1].watchers_count <= watchers[2].watchers_count) {
-                watchers.splice(1,0,watchers[2]);
-                watchers.pop();
-                console.log(watchers[0].watchers_count,watchers[1].watchers_count,watchers[2].watchers_count);
+            } else if (selectedValue[0]."change_this" <= selectedValue[2]."change_this") {
+                selectedValue.splice(0,0,selectedValue[2]);
+                selectedValue.pop();
+            } else if (selectedValue[1]."change_this" <= selectedValue[2]."change_this") {
+                selectedValue.splice(1,0,selectedValue[2]);
+                selectedValue.pop();
+            }
+        } else if (selectedValue.length > 3) {
+            if (selectedValue[2]."change_this" <= selectedValue[3]."change_this") {
+                if (selectedValue[1]."change_this" <= selectedValue[3]."change_this") {
+                    if (selectedValue[0]."change_this" <= selectedValue[3]."change_this") {
+                        selectedValue.splice(0,0,selectedValue[3]);
+                        selectedValue.pop();
+                        selectedValue.pop();
+                    } else {
+                        selectedValue.splice(1,0,selectedValue[3]);
+                        selectedValue.pop();
+                        selectedValue.pop();
+                    }
+                } else {
+                    selectedValue.splice(2,0,selectedValue[3]);
+                        selectedValue.pop();
+                        selectedValue.pop();
+                }
+                
+            } else {
+                selectedValue.pop();
             }
         }
     }
-    console.log(watchers);
+    console.log(selectedValue);
+    const divinator = document.querySelector("#top3Repos");
+    const spanContainer = document.createElement("span");
+    divinator.appendChild(spanContainer);
+    //spanContainer.hidden = true;
+    spanContainer.id = "watchersSpan";
+    for(let x of selectedValue) {
+        const repoDiv = document.createElement("div");
+        spanContainer.appendChild(repoDiv);
+        const repoPName = document.createElement("p");
+        repoPName.innerText = "Name: " + x.name;
+        const repoPID = document.createElement("p");
+        repoPID.innerText = "ID: " + x.id;
+        const repoPselectedValue = document.createElement("p");
+        repoPselectedValue.innerText = "Watchers: " + x.watchers_count;
+        repoDiv.appendChild(repoPName);
+        repoDiv.appendChild(repoPID);
+        repoDiv.appendChild(repoPselectedValue);
+    }
 }
+
+    */
+
+/*----------------------------------------------Top3 Fetch and Sort----------------------------------------*/
+
+function top3SelectorHasChanged(selectedName) {
+    const top3ForkEvent = document.querySelector("#forkSpan")
+    const top3SizeEvent = document.querySelector("#sizeSpan")
+    const top3IssueEvent = document.querySelector("#issueSpan")
+    const top3WatcherEvent = document.querySelector("#watchersSpan")
+    const top3Select = document.querySelector("#" + selectedName + "Span")
+    top3ForkEvent.hidden = true;
+    top3IssueEvent.hidden = true;
+    top3SizeEvent.hidden = true;
+    top3WatcherEvent.hidden = true;
+    top3Select.hidden = false;
+}
+
+async function top3Size (repos) {
+    let selectedValue = [];
+    for(let x of repos) {
+        selectedValue.push(x)
+        if (selectedValue.length === 3) {
+            if (selectedValue[0].size <= selectedValue[1].size) {
+                selectedValue.splice(0,0,selectedValue[1]);
+                selectedValue.splice(2,1);
+                if (selectedValue[0].size <= selectedValue[2].size) {
+                    selectedValue.splice(0,0,selectedValue[2]);
+                    selectedValue.pop();
+                } else if (selectedValue[1].size <= selectedValue[2].size) {
+                    selectedValue.splice(1,0,selectedValue[2]);
+                    selectedValue.pop();
+                }
+            } else if (selectedValue[0].size <= selectedValue[2].size) {
+                selectedValue.splice(0,0,selectedValue[2]);
+                selectedValue.pop();
+            } else if (selectedValue[1].size <= selectedValue[2].size) {
+                selectedValue.splice(1,0,selectedValue[2]);
+                selectedValue.pop();
+            }
+        } else if (selectedValue.length > 3) {
+            if (selectedValue[2].size <= selectedValue[3].size) {
+                if (selectedValue[1].size <= selectedValue[3].size) {
+                    if (selectedValue[0].size <= selectedValue[3].size) {
+                        selectedValue.splice(0,0,selectedValue[3]);
+                        selectedValue.pop();
+                        selectedValue.pop();
+                    } else {
+                        selectedValue.splice(1,0,selectedValue[3]);
+                        selectedValue.pop();
+                        selectedValue.pop();
+                    }
+                } else {
+                    selectedValue.splice(2,0,selectedValue[3]);
+                        selectedValue.pop();
+                        selectedValue.pop();
+                }
+                
+            } else {
+                selectedValue.pop();
+            }
+        }
+    }
+    console.log(selectedValue);
+    const divinator = document.querySelector("#top3Repos");
+    const spanContainer = document.createElement("span");
+    divinator.appendChild(spanContainer);
+    spanContainer.hidden = true;
+    spanContainer.id = "sizeSpan";
+    for(let x of selectedValue) {
+        const repoDiv = document.createElement("div");
+        spanContainer.appendChild(repoDiv);
+        const repoPName = document.createElement("p");
+        repoPName.innerText = "Name: " + x.name;
+        const repoPID = document.createElement("p");
+        repoPID.innerText = "ID: " + x.id;
+        const repoPselectedValue = document.createElement("p");
+        repoPselectedValue.innerText = "Size: " + x.size;
+        repoDiv.appendChild(repoPName);
+        repoDiv.appendChild(repoPID);
+        repoDiv.appendChild(repoPselectedValue);
+    }
+}
+
+
+async function top3Issue (repos) {
+    let selectedValue = [];
+    for(let x of repos) {
+        selectedValue.push(x)
+        if (selectedValue.length === 3) {
+            if (selectedValue[0].open_issues_count <= selectedValue[1].open_issues_count) {
+                selectedValue.splice(0,0,selectedValue[1]);
+                selectedValue.splice(2,1);
+                if (selectedValue[0].open_issues_count <= selectedValue[2].open_issues_count) {
+                    selectedValue.splice(0,0,selectedValue[2]);
+                    selectedValue.pop();
+                } else if (selectedValue[1].open_issues_count <= selectedValue[2].open_issues_count) {
+                    selectedValue.splice(1,0,selectedValue[2]);
+                    selectedValue.pop();
+                }
+            } else if (selectedValue[0].open_issues_count <= selectedValue[2].open_issues_count) {
+                selectedValue.splice(0,0,selectedValue[2]);
+                selectedValue.pop();
+            } else if (selectedValue[1].open_issues_count <= selectedValue[2].open_issues_count) {
+                selectedValue.splice(1,0,selectedValue[2]);
+                selectedValue.pop();
+            }
+        } else if (selectedValue.length > 3) {
+            if (selectedValue[2].open_issues_count <= selectedValue[3].open_issues_count) {
+                if (selectedValue[1].open_issues_count <= selectedValue[3].open_issues_count) {
+                    if (selectedValue[0].open_issues_count <= selectedValue[3].open_issues_count) {
+                        selectedValue.splice(0,0,selectedValue[3]);
+                        selectedValue.pop();
+                        selectedValue.pop();
+                    } else {
+                        selectedValue.splice(1,0,selectedValue[3]);
+                        selectedValue.pop();
+                        selectedValue.pop();
+                    }
+                } else {
+                    selectedValue.splice(2,0,selectedValue[3]);
+                        selectedValue.pop();
+                        selectedValue.pop();
+                }
+                
+            } else {
+                selectedValue.pop();
+            }
+        }
+    }
+    console.log(selectedValue);
+    const divinator = document.querySelector("#top3Repos");
+    const spanContainer = document.createElement("span");
+    divinator.appendChild(spanContainer);
+    spanContainer.hidden = true;
+    spanContainer.id = "issueSpan";
+    for(let x of selectedValue) {
+        const repoDiv = document.createElement("div");
+        spanContainer.appendChild(repoDiv);
+        const repoPName = document.createElement("p");
+        repoPName.innerText = "Name: " + x.name;
+        const repoPID = document.createElement("p");
+        repoPID.innerText = "ID: " + x.id;
+        const repoPselectedValue = document.createElement("p");
+        repoPselectedValue.innerText = "Open Issues: " + x.open_issues_count;
+        repoDiv.appendChild(repoPName);
+        repoDiv.appendChild(repoPID);
+        repoDiv.appendChild(repoPselectedValue);
+    }
+}
+
+async function top3Forks (repos) {
+    let selectedValue = [];
+    for(let x of repos) {
+        selectedValue.push(x)
+        if (selectedValue.length === 3) {
+            if (selectedValue[0].forks_count <= selectedValue[1].forks_count) {
+                selectedValue.splice(0,0,selectedValue[1]);
+                selectedValue.splice(2,1);
+                if (selectedValue[0].forks_count <= selectedValue[2].forks_count) {
+                    selectedValue.splice(0,0,selectedValue[2]);
+                    selectedValue.pop();
+                } else if (selectedValue[1].forks_count <= selectedValue[2].forks_count) {
+                    selectedValue.splice(1,0,selectedValue[2]);
+                    selectedValue.pop();
+                }
+            } else if (selectedValue[0].forks_count <= selectedValue[2].forks_count) {
+                selectedValue.splice(0,0,selectedValue[2]);
+                selectedValue.pop();
+            } else if (selectedValue[1].forks_count <= selectedValue[2].forks_count) {
+                selectedValue.splice(1,0,selectedValue[2]);
+                selectedValue.pop();
+            }
+        } else if (selectedValue.length > 3) {
+            if (selectedValue[2].forks_count <= selectedValue[3].forks_count) {
+                if (selectedValue[1].forks_count <= selectedValue[3].forks_count) {
+                    if (selectedValue[0].forks_count <= selectedValue[3].forks_count) {
+                        selectedValue.splice(0,0,selectedValue[3]);
+                        selectedValue.pop();
+                        selectedValue.pop();
+                    } else {
+                        selectedValue.splice(1,0,selectedValue[3]);
+                        selectedValue.pop();
+                        selectedValue.pop();
+                    }
+                } else {
+                    selectedValue.splice(2,0,selectedValue[3]);
+                        selectedValue.pop();
+                        selectedValue.pop();
+                }
+                
+            } else {
+                selectedValue.pop();
+            }
+        }
+    }
+    const divinator = document.querySelector("#top3Repos");
+    const spanContainer = document.createElement("span");
+    divinator.appendChild(spanContainer);
+    spanContainer.hidden = true;
+    spanContainer.id = "forkSpan";
+    for(let x of selectedValue) {
+        const repoDiv = document.createElement("div");
+        spanContainer.appendChild(repoDiv);
+        const repoPName = document.createElement("p");
+        repoPName.innerText = "Name: " + x.name;
+        const repoPID = document.createElement("p");
+        repoPID.innerText = "ID: " + x.id;
+        const repoPselectedValue = document.createElement("p");
+        repoPselectedValue.innerText = "Forks: " + x.forks_count;
+        repoDiv.appendChild(repoPName);
+        repoDiv.appendChild(repoPID);
+        repoDiv.appendChild(repoPselectedValue);
+    }
+}
+
+//find the top 3 "best" public repos of user
+async function top3watchers (repos) {
+    let selectedValue = [];
+    for(let x of repos) {
+        selectedValue.push(x)
+        if (selectedValue.length === 3) {
+            if (selectedValue[0].watchers_count <= selectedValue[1].watchers_count) {
+                selectedValue.splice(0,0,selectedValue[1]);
+                selectedValue.splice(2,1);
+                if (selectedValue[0].watchers_count <= selectedValue[2].watchers_count) {
+                    selectedValue.splice(0,0,selectedValue[2]);
+                    selectedValue.pop();
+                } else if (selectedValue[1].watchers_count <= selectedValue[2].watchers_count) {
+                    selectedValue.splice(1,0,selectedValue[2]);
+                    selectedValue.pop();
+                }
+            } else if (selectedValue[0].watchers_count <= selectedValue[2].watchers_count) {
+                selectedValue.splice(0,0,selectedValue[2]);
+                selectedValue.pop();
+            } else if (selectedValue[1].watchers_count <= selectedValue[2].watchers_count) {
+                selectedValue.splice(1,0,selectedValue[2]);
+                selectedValue.pop();
+            }
+        } else if (selectedValue.length > 3) {
+            if (selectedValue[2].watchers_count <= selectedValue[3].watchers_count) {
+                if (selectedValue[1].watchers_count <= selectedValue[3].watchers_count) {
+                    if (selectedValue[0].watchers_count <= selectedValue[3].watchers_count) {
+                        selectedValue.splice(0,0,selectedValue[3]);
+                        selectedValue.pop();
+                        selectedValue.pop();
+                    } else {
+                        selectedValue.splice(1,0,selectedValue[3]);
+                        selectedValue.pop();
+                        selectedValue.pop();
+                    }
+                } else {
+                    selectedValue.splice(2,0,selectedValue[3]);
+                        selectedValue.pop();
+                        selectedValue.pop();
+                }
+                
+            } else {
+                selectedValue.pop();
+            }
+        }
+    }
+    console.log(selectedValue);
+    const divinator = document.querySelector("#top3Repos");
+    const spanContainer = document.createElement("span");
+    divinator.appendChild(spanContainer);
+    spanContainer.hidden = false;
+    spanContainer.id = "watchersSpan";
+    for(let x of selectedValue) {
+        const repoDiv = document.createElement("div");
+        spanContainer.appendChild(repoDiv);
+        const repoPName = document.createElement("p");
+        repoPName.innerText = "Name: " + x.name;
+        const repoPID = document.createElement("p");
+        repoPID.innerText = "ID: " + x.id;
+        const repoPselectedValue = document.createElement("p");
+        repoPselectedValue.innerText = "Watchers: " + x.watchers_count;
+        repoDiv.appendChild(repoPName);
+        repoDiv.appendChild(repoPID);
+        repoDiv.appendChild(repoPselectedValue);
+    }
+}
+
+
+
+/*----------------------------------------------Commits Fetching----------------------------------------*/
+
 
 //auslagerung in async function um multiple aufrufe zu starten und die geschwindigkeit von mehrere Sekunden auf wenige zu senken.
 async function commitFetchAndSort(commits,repo,currentPage,pageNumber, userName, userID) {
@@ -177,6 +492,10 @@ async function repoCommitsFetch (repo, userName, userID) {
     loopCounter--;
 }
 
+
+/*-----------------------------------Repos Fetching and Starting Point----------------------------------------*/
+
+
 async function userRepoFetch () {
     const userName = document.querySelector("#username-search").value;
 
@@ -211,14 +530,22 @@ async function userRepoFetch () {
             }
         }*/
 
-        top3Repos(responseJSON);
+        await top3watchers(responseJSON);
+        top3Forks(responseJSON);
+        top3Size(responseJSON);
+        top3Issue(responseJSON);
 
     } catch (error) {
         console.log(error)
     }
     }
 
+/*---------------------------------------Events and Error Handling----------------------------------------*/
 
+function eventHandler() {
+    const top3SelectorChange = document.querySelector("#top3Select");
+    top3SelectorChange.addEventListener("change", () => top3SelectorHasChanged(top3SelectorChange.selectedOptions[0].id))
+}
 
 function errorHandling (errorObject) {
     return;

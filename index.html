@@ -8,11 +8,17 @@
 <body>
 <span>
     <label for="username-search">Username:</label>
-    <input type="text" id="username-search" name="username-search" value="manuel-hegner">
+    <input type="text" id="username-search" name="username-search" value="sandboxie-plus">
 </span>
 <div id="gridMainBody">
     <div id="top3Repos">
-
+        <h3>The Top 3 Repositorys with </h3>
+        <select name="top3Select" id="top3Select">
+            <option id="watchers">Most Watchers</option>
+            <option id="fork">Most Forks</option>
+            <option id="size">Biggest Repository</option>
+            <option id="issue">Most Open Issues</option>
+        </select>
     </div>
     <div id="commitBestDays">
         <table>
