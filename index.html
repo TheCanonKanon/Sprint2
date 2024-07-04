@@ -6,45 +6,46 @@
     <title>Document</title>
 </head>
 <body>
-<span>
-    <label for="username-search">Username:</label>
-    <input type="text" id="username-search" name="username-search" value="TheCanonKanon">
-</span>
-<div id="gridMainBody">
-    <div id="top3Repos">
-        <h3>The Top 3 Repositorys with </h3>
-        <select name="top3Select" id="top3Select">
-            <option id="watchers">Most Watchers</option>
-            <option id="fork">Most Forks</option>
-            <option id="size">Biggest Repository</option>
-            <option id="issue">Most Open Issues</option>
-        </select>
+    <img hidden="true" src="" id="profilPicture" alt="Profil Picture of the selected User" width="200" height="200"><br>
+    <span>
+        <label for="username-search">Username:</label>
+        <input type="text" id="username-search" name="username-search" value="">
+    </span>
+    <div id="gridMainBody">
+        <div id="top3Repos">
+            <h3>The Top 3 Repositorys with </h3>
+            <select name="top3Select" id="top3Select">
+                <option id="watchers">Most Watchers</option>
+                <option id="fork">Most Forks</option>
+                <option id="size">Biggest Repository</option>
+                <option id="issue">Most Open Issues</option>
+            </select>
+        </div>
+        <div id="commitBestDays">
+            <table>
+                <tr>
+                    <th>Monday</th>
+                    <th>Tuesday</th>
+                    <th>Wednesday</th>
+                    <th>Thursday</th>
+                    <th>Friday</th>
+                    <th>Saturday</th>
+                    <th>Sunday</th>
+                </tr>
+                <tr id="commitBestDaysTable">
+                    <td id="commit1">0</td>
+                    <td id="commit2">0</td>
+                    <td id="commit3">0</td>
+                    <td id="commit4">0</td>
+                    <td id="commit5">0</td>
+                    <td id="commit6">0</td>
+                    <td id="commit0">0</td>
+                </tr>
+            </table>
+        </div>
     </div>
-    <div id="commitBestDays">
-        <table>
-            <tr>
-                <th>Monday</th>
-                <th>Tuesday</th>
-                <th>Wednesday</th>
-                <th>Thursday</th>
-                <th>Friday</th>
-                <th>Saturday</th>
-                <th>Sunday</th>
-            </tr>
-            <tr id="commitBestDaysTable">
-                <td id="commit1">0</td>
-                <td id="commit2">0</td>
-                <td id="commit3">0</td>
-                <td id="commit4">0</td>
-                <td id="commit5">0</td>
-                <td id="commit6">0</td>
-                <td id="commit0">0</td>
-            </tr>
-          </table>
-    </div>
-</div>
 
-<script src="apikey.js"></script>
-<script src="main.js"></script>
+    <script src="apikey.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>
