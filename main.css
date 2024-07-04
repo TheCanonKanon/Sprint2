@@ -1,0 +1,15 @@
+#gridMainBody {
+    display: grid;
+    grid-template-rows: 50% 50%;
+    width:  100%;
+}
+
+#top3Repos > span{
+    display: none;
+    grid-template-columns: 33% 33% 33%;
+}
+
+#watchersSpan {
+    display: grid;
+    grid-template-columns: 33% 33% 33%;
+}

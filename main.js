@@ -221,9 +221,9 @@ window.onload = () => {
     //userRepoFetch();
     eventHandler();
     const usernameSearch = document.querySelector("#username-search");
-    userRepoFetch(usernameSearch.value)
     const top3SelectorChange = document.querySelector("#top3Select");
     top3SelectorChange.selectedIndex = 0
+    userRepoFetch(usernameSearch.value)
 }
 
 
@@ -235,11 +235,12 @@ function top3SelectorHasChanged(selectedName) {
     const top3IssueEvent = document.querySelector("#issueSpan")
     const top3WatcherEvent = document.querySelector("#watchersSpan")
     const top3Select = document.querySelector("#" + selectedName + "Span")
-    top3ForkEvent.hidden = true;
-    top3IssueEvent.hidden = true;
-    top3SizeEvent.hidden = true;
-    top3WatcherEvent.hidden = true;
-    top3Select.hidden = false;
+    top3ForkEvent.style.display = "none";
+    top3IssueEvent.style.display = "none";
+    top3SizeEvent.style.display = "none";
+    top3WatcherEvent.style.display = "none";
+    top3Select.style.display = "grid";
+    console.log("test");
 }
 
 async function top3Size (repos) {
@@ -290,7 +291,7 @@ async function top3Size (repos) {
     const divinator = document.querySelector("#top3Repos");
     const spanContainer = document.createElement("span");
     divinator.appendChild(spanContainer);
-    spanContainer.hidden = true;
+    spanContainer.style.display = "none";
     spanContainer.id = "sizeSpan";
     for(let x of selectedValue) {
         const repoDiv = document.createElement("div");
@@ -356,7 +357,7 @@ async function top3Issue (repos) {
     const divinator = document.querySelector("#top3Repos");
     const spanContainer = document.createElement("span");
     divinator.appendChild(spanContainer);
-    spanContainer.hidden = true;
+    spanContainer.style.display = "none";
     spanContainer.id = "issueSpan";
     for(let x of selectedValue) {
         const repoDiv = document.createElement("div");
@@ -421,7 +422,7 @@ async function top3Forks (repos) {
     const divinator = document.querySelector("#top3Repos");
     const spanContainer = document.createElement("span");
     divinator.appendChild(spanContainer);
-    spanContainer.hidden = true;
+    spanContainer.style.display = "none";
     spanContainer.id = "forkSpan";
     for(let x of selectedValue) {
         const repoDiv = document.createElement("div");
@@ -487,7 +488,7 @@ async function top3watchers (repos) {
     const divinator = document.querySelector("#top3Repos");
     const spanContainer = document.createElement("span");
     divinator.appendChild(spanContainer);
-    spanContainer.hidden = false;
+    spanContainer.style.display = "grid";
     spanContainer.id = "watchersSpan";
     for(let x of selectedValue) {
         const repoDiv = document.createElement("div");
@@ -504,7 +505,18 @@ async function top3watchers (repos) {
     }
 }
 
-
+function clearTop3Repos() {
+    const watchersSpan = document.querySelector("#watchersSpan")
+    if (watchersSpan != null) {
+        const forkSpan = document.querySelector("#forkSpan")    
+        const sizeSpan = document.querySelector("#sizeSpan")    
+        const issueSpan = document.querySelector("#issueSpan")
+        watchersSpan.remove();
+        forkSpan.remove();
+        sizeSpan.remove();
+        issueSpan.remove();
+    }
+}
 
 /*----------------------------------------------Commits Fetching----------------------------------------*/
 
@@ -555,10 +567,14 @@ async function allCommits(userName) {
             }
         }
     }
-    
-    
 }
 
+function clearCommitsCount() {
+    for (let x = 0; x < 7; x++) {
+        const commitField = document.getElementById("commit" + x);
+        commitField.innerText = 0;
+    }    
+}
 
 /*-----------------------------------Repos Fetching and Starting Point----------------------------------------*/
 
@@ -566,8 +582,21 @@ async function allCommits(userName) {
 
 async function userRepoFetch (userName) {
     try {
+        clearTop3Repos();
+        clearCommitsCount();
+        const userNameLabelRemove = document.querySelector("#userNameWarning");
+        if (userNameLabelRemove != null) {userNameLabelRemove.remove();}
+
         if (userName === "") {
             console.error("Username is empty");
+            const profilPicture = document.querySelector("#profilPicture");
+            profilPicture.hidden = true;
+            const usernameSearch = document.querySelector("#usernameBar");
+            const userNameLabel = document.createElement("label");
+            userNameLabel.style.color = "red";
+            userNameLabel.innerText = "Username is empty";
+            userNameLabel.id = "userNameWarning";
+            usernameSearch.appendChild(userNameLabel);
             return;
         }
         const response = await fetch (`https://api.github.com/users/${userName}/repos`, {
